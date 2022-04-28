@@ -22,7 +22,6 @@ export const PlayerProvider = ({ children }: IProvider) => {
   const [matchId, setMatchId] = useState(0);
 
   const Login = async ({ username, category }: IUserLogin) => {
-    setIsLogged(true);
     setUsername(username);
 
     const playerInfo = {
@@ -38,10 +37,15 @@ export const PlayerProvider = ({ children }: IProvider) => {
       },
       body: JSON.stringify(playerInfo),
     });
+    if (!result.ok) {
+      alert("Erro ao logar !");
+    }
+
     const { round }: IPropsRound = await result.json();
     setQuestions(round.questions);
     setTotalRounds(round.questions.length);
     setMatchId(round.id);
+    setIsLogged(true);
   };
 
   const calculatePoints = async (round: number, answers: IAnswers) => {
